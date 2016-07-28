@@ -1,0 +1,2 @@
+
+(gedit:16329): Gtk-WARNING **: Attempting to read the recently used resources file at '/home/ravi/.local/share/recently-used.xbel', but the parser failed: Failed to open file '/home/ravi/.local/share/recently-used.xbel': Permission denied.
