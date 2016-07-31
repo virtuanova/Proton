@@ -9,6 +9,8 @@
 namespace CoreBundle\Services;
 
 use CoreDomain\User\UserRepositoryInterface;
+use stdClass;
+
 class UserService
 {
     /**
@@ -54,5 +56,27 @@ class UserService
     {
         $pi = $this->userRepo->getUserPersonalInformation($id);
         return $pi;
+    }
+
+    public function getIdentifyingInfo($id)
+    {
+        $identifyingInfo = $this->userRepo->getUserIdentifyingInfo($id);
+        return $identifyingInfo;
+    }
+
+    public function getFullProfile($id)
+    {
+        $profile  = new stdClass();
+        $profile->IdentifyingInfo = $this->userRepo->getUserIdentifyingInfo($id);
+        $profile->ContactInfo = $this->userRepo->getContactInfo($id);
+        $profile->EducationHistory = $this->userRepo->getEducationHistory($id);
+        $profile->EmploymentHistory = $this->userRepo->getEmploymentHistory($id);
+        $profile->ProfessionalDistinctions = $this->userRepo->getProfessionalDistinctions($id);
+        $profile->FundingHistory = $this->userRepo->getFundingHistory($id);
+        $profile->Outputs = $this->userRepo->getOutputs($id);
+        $profile->ServicesResearchScholarly = $this->userRepo->getServicesResearchScholarly($id);
+        $profile->ServicesOther = $this->userRepo->getServicesOther($id);
+
+        return $profile;
     }
 }

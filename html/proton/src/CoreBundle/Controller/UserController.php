@@ -9,6 +9,7 @@
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\PersonInfo;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends BaseController
 {
@@ -46,7 +47,7 @@ class UserController extends BaseController
         $html ='<tbody>';
         $user = $this->userService->getUserById($id);
         /** @var PersonInfo $userInfo */
-        $userInfo = $this->userService->getUserPersonalInfo($id);
+        $userInfo = $this->userService->getIdentifyingInfo($id);
         $html .= sprintf('<tr><td>%s</td><td>%s</td></tr>','First Name', $user->getFirstName());
         $html .= sprintf('<tr><td>%s</td><td>%s</td></tr>','Last Name', $user->getLastName());
         $html .= sprintf('<tr><td>%s</td><td>%s</td></tr>','Internal Id', $user->getInternalId());
@@ -59,6 +60,12 @@ class UserController extends BaseController
             ]
         );
 
+    }
+
+    public function getUserProfileComplete($id)
+    {
+        $profile = $this->userService->getFullProfile($id);
+        return new JsonResponse(($profile), 200);
     }
 
 }

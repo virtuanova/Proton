@@ -23,4 +23,6 @@ abstract class BaseController implements ControllerInterface
     public function showAction(){}
 
     public function getUserById($id){}
+
+    public function getUserProfileComplete($id){}
 }

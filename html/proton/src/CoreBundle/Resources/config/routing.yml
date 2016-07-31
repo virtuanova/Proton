@@ -8,7 +8,14 @@ core.all:
     defaults:
       _controller: "core.userController:showAction"
 
+core.fullProfile:
+    path: /full/{$id}
+    defaults:
+      _controller: "core.userController:getUserProfileComplete"
+
 core.UserByID:
       path: /user/{id}
       defaults:
-        _controller: "core.userController:getUserById"
+        _controller: "core.userController:getUserProfileComplete"
+
+

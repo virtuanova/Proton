@@ -27,4 +27,25 @@ interface UserRepositoryInterface
     public function getUserById($id);
 
     public function getUserPersonalInformation($id);
+
+    public function getUserIdentifyingInfo($id);
+
+    Public function getContactInfo($id);
+
+    public function getEducationHistory($id);
+
+    public function getEmploymentHistory($id);
+
+    public function getProfessionalDistinctions($id);
+
+    public function getFundingHistory($id);
+
+    public function getOutputs($id);
+
+    public function getServicesResearchScholarly($id);
+
+    public function getServicesOther($id);
+
+    public function getDataFromEntities(array $entities, $id);
+
 }

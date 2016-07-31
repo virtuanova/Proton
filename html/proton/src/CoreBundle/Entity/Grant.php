@@ -8,7 +8,7 @@ use CoreDomain\Objects\Grant as BaseGrant;
 /**
  * Grant
  *
- * @ORM\Table(name="grant")
+ * @ORM\Table(name="grants")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\GrantRepository")
  */
 class Grant extends BaseGrant

@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 use CoreDomain\User\UserRepositoryInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use stdClass;
 
 /**
  * UserRepository
@@ -58,5 +59,220 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         $query->setParameter('userid',1);
         $users = $query->getResult();
         return $users;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return stdClass
+     */
+    public function getUserIdentifyingInfo($id)
+    {
+        $entities = [
+            'PersonInfo',
+            'Citizenship',
+            'LanguageCompetency',
+            'CareerStatus'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);;
+    }
+
+    public function getContactInfo($id)
+    {
+        $entities = [
+            'MailingAddress',
+            'Email',
+            'PhoneNumber',
+            'WebAddress'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+
+    }
+
+    public function getEducationHistory($id)
+    {
+        $entities = [
+            'Degree',
+            'ProfessionalDesignation'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    public function getEmploymentHistory($id)
+    {
+        $entities = [
+            'HEInstitutionEmployment',
+            'ProfessionalLeaveofAbsence',
+            'NonHEEmployment'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    public function getProfessionalDistinctions( $id)
+    {
+        $entities = [
+            'Distinction'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    public function getFundingHistory($id)
+    {
+        $entities = [
+            'Grant',
+            'Contract'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    public function getOutputs($id)
+    {
+        $outputs = new stdClass();
+        $outputs->Publications = $outputs->Artistic = new stdClass();
+
+        $outputs->Publications->Journals = $this->getDataFromEntities([
+            'JournalArticle',
+            'JournalIssue'
+        ],$id);
+
+        $outputs->Publications->Books = $this->getDataFromEntities([
+            'Book',
+            'EditedBook',
+            'BookChapter',
+            'BookReview'
+        ], $id);
+
+        $outputs->Publications->Other = $this->getDataFromEntities([
+            'Translation',
+            'Dissertation',
+            'SupervisedStudentPublication',
+            'NewspaperArticle',
+            'EncyclopediaEntry',
+            'MagazineArticle',
+            'DictionaryEntry',
+            'Report',
+            'WorkingPaper',
+            'ResearchTool',
+            'Manual',
+            'OnlineResource',
+            'Test',
+            'Website'
+        ], $id);
+
+        $outputs->Conference = $this->getDataFromEntities([
+            'ConferencePoster',
+            'ConferenceAbstract',
+            'ConferencePaper'
+        ], $id);
+
+        $outputs->IntellectualProperty = $this->getDataFromEntities([
+            'Trademark',
+            'RegisteredCopyright',
+            'Disclosure',
+            'Patent'
+        ], $id);
+
+        $outputs->Artistic->Theatric = $this->getDataFromEntities([
+            'Theatric',
+            'LightDesign',
+            'SetDesign',
+            'SoundDesign',
+            'PerformanceArt'
+        ], $id);
+
+        $outputs->Artistic->Music = $this->getDataFromEntities([
+            'MusicalPerformance',
+            'MusicalComposition',
+            'AudioRecording'
+        ], $id);
+
+        $outputs->Artistic->Other = $this->getDataFromEntities([
+            'ShortFiction',
+            'Script',
+            'RadioTVProgram',
+            'VisualArtwork',
+            'VideoRecording',
+            'CuratorialMuseumExhibition',
+            'Choreography',
+            'ArtisticExhibition',
+            'ExhibitionCatalogue'
+        ], $id);
+
+        $outputs->Others = $this->getDataFromEntities([
+            'StandardorPolicy',
+            'Invention',
+            'DataSet',
+            'Litigation',
+            'ResearchTechnique',
+            'SpinOffCompany',
+            'TechnicalStandard'
+        ], $id);
+        return $outputs;
+    }
+
+    public function getServicesResearchScholarly($id)
+    {
+        $entities = [
+            'ConsultingAdvisory',
+            'ExpertWitness',
+            'JournalReviewingRefereeing',
+            'ConferenceReviewingRefereeing',
+            'Mentoring',
+            'BroadcastInterview',
+            'TextInterview',
+            'ResearchbasedDegreeSupervision',
+            'InstitutionalReview',
+            'GraduateExamination',
+            'GrantApplicationAssessment',
+            'PromotionTenureAssessment'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    public function getServicesOther($id)
+    {
+        $entities = [
+            'NonresearchPresentation',
+            'CommitteeMembership',
+            'OfficeHeld',
+            'EventAdministration',
+            'Editorial',
+            'CommunityService',
+            'EventParticipation',
+            'Membership',
+            'CourseTaught',
+            'CourseDeveloped',
+            'ProgramDeveloped',
+            'CoursebasedDegreeSupervision',
+            'EmployeeSupervision',
+            'SpinOffCompany'
+        ];
+
+        return $this->getDataFromEntities($entities, $id);
+    }
+
+    /**
+     * @param array $entities
+     * @param       $id
+     *
+     * @return stdClass
+     */
+    public function getDataFromEntities(Array $entities, $id)
+    {
+        $baseEntityPath = 'CoreBundle\Entity\\';
+        $entityData = new stdClass();
+        foreach($entities as $entity) {
+            $query = $this->em->createQuery(' select p from '.$baseEntityPath.$entity .' p where p.userId = :userid');
+            $query->setParameter('userid', $id);
+            $entityData->$entity = $query->getArrayResult();
+        }
+        return $entityData;
     }
 }
