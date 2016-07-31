@@ -1,0 +1,27 @@
+services:
+#    core.example:
+#        class: CoreBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+
+
+  core.UserRepository:
+    class: CoreBundle\Repository\UserRepository
+    factory: ["@doctrine", getRepository]
+    arguments: [CoreBundle\Entity\User]
+    public: false
+
+  core.userService:
+    class: CoreBundle\Services\UserService
+    arguments: ["@core.UserRepository"]
+
+  core.userController:
+    class: CoreBundle\Controller\UserController
+    arguments: ["@templating", "@core.userService"]
+
+  core.StringResponseSubscriber:
+    class: CoreBundle\Subscriber\StringResponseSubscriber
+    tags: [{name: kernel.event_subscriber}]
+
+
+
+
