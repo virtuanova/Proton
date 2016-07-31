@@ -1,0 +1,14 @@
+core.home:
+  path: /
+  defaults:
+    _controller: "core.userController:indexAction"
+
+core.all:
+    path: /all
+    defaults:
+      _controller: "core.userController:showAction"
+
+core.UserByID:
+      path: /user/{id}
+      defaults:
+        _controller: "core.userController:getUserById"
